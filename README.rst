@@ -1,6 +1,6 @@
-=======
- hidpi-tk
-=======
+===================
+hidpi-tk
+===================
 .. image:: https://github.com/Wulian233/hidpi-tk/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/Wulian233/hidpi-tk/actions/workflows/ci.yml
 .. image:: https://codecov.io/gh/Wulian233/hidpi-tk/branch/main/graph/badge.svg
@@ -57,7 +57,7 @@ it adjusts font scaling, which makes cross-platform development easier and
 more consistent.
 
 Font scaling is called from idlelib, so the minimum required version is Python 3.6.
-See: https://github.com/python/cpython/pull/3639__
+See: `<https://github.com/python/cpython/pull/3639>`
 
 
 License
