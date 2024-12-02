@@ -1,5 +1,5 @@
 -e .
 coverage==7.6.8
 pytest-cov==6.0.0
-pytest==8.3.3
+pytest==8.3.4
 wheel==0.45.1
