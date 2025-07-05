@@ -6,6 +6,7 @@ Changes
 
 - Now does not depend on idlelib
 - Added more adaptation optimizations
+- Port to pyproject.toml build system
 
 1.0.0 (2024-10-05)
 ------------------

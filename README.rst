@@ -11,8 +11,8 @@ hidpi-tk
 ``hidpi-tk`` is a Python library designed to enhance Tkinter-based GUI applications
 by automatically adjusting DPI scaling and font sizes, particularly for high-DPI monitors.
 
-.. image:: https://raw.githubusercontent.com/Wulian233/hidpi-tk/refs/heads/main/screenshot.png
-    :target: https://raw.githubusercontent.com/Wulian233/hidpi-tk/refs/heads/main/screenshot.png
+.. image:: ./screenshot.png
+    :target: ./screenshot.png
 
 Features
 ===================

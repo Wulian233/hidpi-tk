@@ -1,3 +1,40 @@
 [build-system]
 requires = ["setuptools>=51", "wheel>=0.36"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "hidpi-tk"
+version = "1.1.0"
+requires-python = ">=3.6"
+authors = [
+  {name = "Wulian233", email = "xiguawulian@gmail.com"},
+]
+description = "Fixed Tkinter-based GUI window blurry on high-DPI monitors."
+readme = "README.rst"
+license = "Apache-2.0"
+keywords = ["hidpi-tk", "tkinter", "dpi", "highdpi", "blurry", "tkdpi"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.6",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+
+  "Operating System :: Microsoft :: Windows",
+
+  "Topic :: Software Development :: Libraries"
+]
+
+[project.urls]
+Repository = "https://github.com/Wulian233/hidpi-tk.git"
+"Bug Tracker" = "https://github.com/Wulian233/hidpi-tk/issues"
+Changelog = "https://github.com/Wulian233/hidpi-tk/blob/main/CHANGES.rst"
