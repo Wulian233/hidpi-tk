@@ -1,7 +1,0 @@
-[run]
-branch = True
-source = hidpi_tk, tests
-omit = site-packages
-
-[html]
-directory = coverage

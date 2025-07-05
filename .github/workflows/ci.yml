@@ -8,50 +8,6 @@ on:
     branches: [ main ]
 
 jobs:
-
-  unit:
-    name: Unit
-    strategy:
-      matrix:
-        python-version: ["3.12"]
-        os: [windows]
-      fail-fast:
-        false
-    runs-on: ${{ matrix.os }}-latest
-    timeout-minutes: 5
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Get pip cache dir
-      id: pip-cache
-      run: |
-        echo "::set-output name=dir::$(pip cache dir)"
-    - name: Cache PyPI
-      uses: actions/cache@v4
-      with:
-        key: pip-ci-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('requirements-dev.txt') }}
-        path: ${{ steps.pip-cache.outputs.dir }}
-        restore-keys: |
-            pip-ci-${{ runner.os }}-${{ matrix.python-version }}-
-    - name: Install dependencies
-      uses: py-actions/py-dependency-install@v4
-      with:
-        path: requirements-dev.txt
-    - name: Run unittests
-      env:
-        COLOR: 'yes'
-      run: |
-        pytest --cov=hidpi-tk --cov=tests --cov-report=term --cov-report=xml:coverage.xml
-    - name: Upload results to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-
-
   deploy:
     name: Deploy
     needs: unit

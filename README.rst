@@ -3,8 +3,6 @@ hidpi-tk
 ===================
 .. image:: https://github.com/Wulian233/hidpi-tk/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/Wulian233/hidpi-tk/actions/workflows/ci.yml
-.. image:: https://codecov.io/gh/Wulian233/hidpi-tk/branch/main/graph/badge.svg
-    :target: https://codecov.io/gh/Wulian233/hidpi-tk
 .. image:: https://img.shields.io/pypi/v/hidpi-tk.svg
     :target: https://pypi.python.org/pypi/hidpi-tk
 
@@ -55,9 +53,6 @@ provide excellent high-DPI support, so this library does not include specific
 code for DPI adjustments. However, using this library is still beneficial as
 it adjusts font scaling, which makes cross-platform development easier and
 more consistent.
-
-Font scaling is called from idlelib, so the minimum required version is Python 3.6.
-See: `<https://github.com/python/cpython/pull/3639>`
 
 
 License
