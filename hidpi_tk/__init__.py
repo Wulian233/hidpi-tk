@@ -67,7 +67,7 @@ class DPIAwareTk(Tk):
 
         # Add scaling functions to the root window
         self.TkScale = lambda v: int(float(v) * self.DPI_scaling)
-        self.TkGeometryScale = lambda s: TkGeometryScale(s, self.TkScale)
+        self.geometry = lambda s: self.wm_geometry(TkGeometryScale(s, self.TkScale))
 
 
 def fix_HiDPI(root):
