@@ -38,12 +38,20 @@ def Get_HWND_DPI(window_handle):
 
 def TkGeometryScale(s, cvtfunc):
     """Scale geometry string based on DPI scaling."""
-    patt = r"(?P<W>\d+)x(?P<H>\d+)\+(?P<X>\d+)\+(?P<Y>\d+)"  # format "WxH+X+Y"
-    R = re.compile(patt).search(s)
-    G = str(cvtfunc(R.group("W"))) + "x"
-    G += str(cvtfunc(R.group("H"))) + "+"
-    G += str(cvtfunc(R.group("X"))) + "+"
-    G += str(cvtfunc(R.group("Y")))
+    try:
+        patt = r"(?P<W>\d+)x(?P<H>\d+)\+(?P<X>\d+)\+(?P<Y>\d+)"  # format "WxH+X+Y"
+        R = re.compile(patt).match(s)
+        if R.span()[1] < len(s) - 1: raise AttributeError()
+        G = str(cvtfunc(R.group("W"))) + "x"
+        G += str(cvtfunc(R.group("H"))) + "+"
+        G += str(cvtfunc(R.group("X"))) + "+"
+        G += str(cvtfunc(R.group("Y")))
+    except AttributeError:
+        patt = r"(?P<W>\d+)x(?P<H>\d+)"  # format "WxH"
+        R = re.compile(patt).match(s)
+        if R.span()[1] < len(s) - 1: raise AttributeError()
+        G = str(cvtfunc(R.group("W"))) + "x"
+        G += str(cvtfunc(R.group("H")))
     return G
 
 
