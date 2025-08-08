@@ -41,15 +41,15 @@ def TkGeometryScale(s, cvtfunc):
     try:
         patt = r"(?P<W>\d+)x(?P<H>\d+)\+(?P<X>\d+)\+(?P<Y>\d+)"  # format "WxH+X+Y"
         R = re.compile(patt).match(s)
-        if R.span()[1] < len(s) - 1: raise AttributeError()
+        if R.span()[1] < len(s) - 1: raise Exception()
         G = str(cvtfunc(R.group("W"))) + "x"
         G += str(cvtfunc(R.group("H"))) + "+"
         G += str(cvtfunc(R.group("X"))) + "+"
         G += str(cvtfunc(R.group("Y")))
-    except AttributeError:
+    except Exception:
         patt = r"(?P<W>\d+)x(?P<H>\d+)"  # format "WxH"
         R = re.compile(patt).match(s)
-        if R.span()[1] < len(s) - 1: raise AttributeError()
+        if R.span()[1] < len(s) - 1: raise Exception("Incorrect geometry string.")
         G = str(cvtfunc(R.group("W"))) + "x"
         G += str(cvtfunc(R.group("H")))
     return G
@@ -121,3 +121,16 @@ def fix_HiDPI(root):
         root.DPI_X, root.DPI_Y, root.DPI_scaling = Get_HWND_DPI(root.winfo_id())
 
     fix_scaling(root)
+
+# Fix place scaling
+import tkinter
+
+def newplace(self, *args, **kwargs):
+    try:
+        kwargs["x"] = self.master.TkScale(kwargs["x"])
+        kwargs["y"] = self.master.TkScale(kwargs["y"])
+        self.place_configure(*args, **kwargs)
+    except AttributeError: # For no TkScale Tk()s
+        self.place_configure(*args, **kwargs)
+
+tkinter.Widget.place = newplace
