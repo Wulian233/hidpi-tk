@@ -1,9 +1,9 @@
 import os
 import re
 from ctypes import pointer, windll, wintypes
-from tkinter import Tk
+from tkinter import Tk, Widget
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 __all__ = ("DPIAwareTk", "fix_HiDPI")
 
@@ -41,7 +41,8 @@ def TkGeometryScale(s, cvtfunc):
     try:
         patt = r"(?P<W>\d+)x(?P<H>\d+)\+(?P<X>\d+)\+(?P<Y>\d+)"  # format "WxH+X+Y"
         R = re.compile(patt).match(s)
-        if R.span()[1] < len(s) - 1: raise AttributeError()
+        if R.span()[1] < len(s) - 1:
+            raise AttributeError()
         G = str(cvtfunc(R.group("W"))) + "x"
         G += str(cvtfunc(R.group("H"))) + "+"
         G += str(cvtfunc(R.group("X"))) + "+"
@@ -49,7 +50,8 @@ def TkGeometryScale(s, cvtfunc):
     except AttributeError:
         patt = r"(?P<W>\d+)x(?P<H>\d+)"  # format "WxH"
         R = re.compile(patt).match(s)
-        if R.span()[1] < len(s) - 1: raise AttributeError()
+        if R.span()[1] < len(s) - 1:
+            raise AttributeError()
         G = str(cvtfunc(R.group("W"))) + "x"
         G += str(cvtfunc(R.group("H")))
     return G
@@ -77,6 +79,13 @@ class DPIAwareTk(Tk):
         self.TkScale = lambda v: int(float(v) * self.DPI_scaling)
         self.geometry = lambda s: self.wm_geometry(TkGeometryScale(s, self.TkScale))
 
+        orig_place = Widget.place
+        def scaled_place(widget, *args, **kwargs):
+            for key in ("x", "y", "width", "height"):
+                if key in kwargs:
+                    kwargs[key] = self.TkScale(kwargs[key])
+            return orig_place(widget, *args, **kwargs)
+        Widget.place = scaled_place
 
 def fix_HiDPI(root):
     """Adjust scaling for HiDPI displays on Windows."""
