@@ -46,12 +46,19 @@ def TkGeometryScale(s, cvtfunc):
         G += str(cvtfunc(R.group("H"))) + "+"
         G += str(cvtfunc(R.group("X"))) + "+"
         G += str(cvtfunc(R.group("Y")))
-    except Exception:
-        patt = r"(?P<W>\d+)x(?P<H>\d+)"  # format "WxH"
-        R = re.compile(patt).match(s)
-        if R.span()[1] < len(s) - 1: raise Exception("Incorrect geometry string.")
-        G = str(cvtfunc(R.group("W"))) + "x"
-        G += str(cvtfunc(R.group("H")))
+    except:
+        try:
+            patt = r"(?P<W>\d+)x(?P<H>\d+)"  # format "WxH"
+            R = re.compile(patt).match(s)
+            if R.span()[1] < len(s) - 1: raise Exception()
+            G = str(cvtfunc(R.group("W"))) + "x"
+            G += str(cvtfunc(R.group("H")))
+        except:
+            patt = r"\+(?P<X>\d+)\+(?P<Y>\d+)"  # format "+X+Y"
+            R = re.compile(patt).match(s)
+            if R.span()[1] < len(s) - 1: raise Exception("Incorrect geometry string.")
+            G = "+" + str(cvtfunc(R.group("X"))) + "+"
+            G += str(cvtfunc(R.group("Y")))
     return G
 
 
