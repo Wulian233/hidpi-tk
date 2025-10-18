@@ -1,9 +1,9 @@
 import os
 import re
 from ctypes import pointer, windll, wintypes
-from tkinter import Tk
+from tkinter import Tk, Widget
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 __all__ = ("DPIAwareTk", "fix_HiDPI")
 
@@ -84,6 +84,13 @@ class DPIAwareTk(Tk):
         self.TkScale = lambda v: int(float(v) * self.DPI_scaling)
         self.geometry = lambda s: self.wm_geometry(TkGeometryScale(s, self.TkScale))
 
+        orig_place = Widget.place
+        def scaled_place(widget, *args, **kwargs):
+            for key in ("x", "y", "width", "height"):
+                if key in kwargs:
+                    kwargs[key] = self.TkScale(kwargs[key])
+            return orig_place(widget, *args, **kwargs)
+        Widget.place = scaled_place
 
 def fix_HiDPI(root):
     """Adjust scaling for HiDPI displays on Windows."""
@@ -128,16 +135,3 @@ def fix_HiDPI(root):
         root.DPI_X, root.DPI_Y, root.DPI_scaling = Get_HWND_DPI(root.winfo_id())
 
     fix_scaling(root)
-
-# Fix place scaling
-import tkinter
-
-def newplace(self, *args, **kwargs):
-    try:
-        kwargs["x"] = self.master.TkScale(kwargs["x"])
-        kwargs["y"] = self.master.TkScale(kwargs["y"])
-        self.place_configure(*args, **kwargs)
-    except AttributeError: # For no TkScale Tk()s
-        self.place_configure(*args, **kwargs)
-
-tkinter.Widget.place = newplace
