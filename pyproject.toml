@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hidpi-tk"
-version = "1.2.0"
+version = "1.3.0"
 requires-python = ">=3.6"
 authors = [
   {name = "Wulian233", email = "xiguawulian@gmail.com"},
@@ -26,5 +26,6 @@ classifiers = [
 
 [project.urls]
 Repository = "https://github.com/Wulian233/hidpi-tk.git"
+GitHub = "https://github.com/Wulian233/hidpi-tk"
 "Bug Tracker" = "https://github.com/Wulian233/hidpi-tk/issues"
 Changelog = "https://github.com/Wulian233/hidpi-tk/blob/main/CHANGES.rst"
