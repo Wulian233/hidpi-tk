@@ -1,8 +1,6 @@
 ===================
 hidpi-tk
 ===================
-.. image:: https://github.com/Wulian233/hidpi-tk/actions/workflows/ci.yml/badge.svg
-    :target: https://github.com/Wulian233/hidpi-tk/actions/workflows/ci.yml
 .. image:: https://img.shields.io/pypi/v/hidpi-tk.svg
     :target: https://pypi.python.org/pypi/hidpi-tk
 

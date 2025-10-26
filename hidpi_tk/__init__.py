@@ -3,7 +3,7 @@ import re
 from ctypes import pointer, windll, wintypes
 from tkinter import Tk, Widget
 
-__version__ = "1.3.0"
+__version__ = "1.3.1"
 
 __all__ = ("DPIAwareTk", "fix_HiDPI")
 
@@ -41,22 +41,25 @@ def TkGeometryScale(s, cvtfunc):
     try:
         patt = r"(?P<W>\d+)x(?P<H>\d+)\+(?P<X>\d+)\+(?P<Y>\d+)"  # format "WxH+X+Y"
         R = re.compile(patt).match(s)
-        if R.span()[1] < len(s) - 1: raise Exception()
+        if R.span()[1] < len(s) - 1:
+            raise Exception()
         G = str(cvtfunc(R.group("W"))) + "x"
         G += str(cvtfunc(R.group("H"))) + "+"
         G += str(cvtfunc(R.group("X"))) + "+"
         G += str(cvtfunc(R.group("Y")))
-    except:
+    except Exception:
         try:
             patt = r"(?P<W>\d+)x(?P<H>\d+)"  # format "WxH"
             R = re.compile(patt).match(s)
-            if R.span()[1] < len(s) - 1: raise Exception()
+            if R.span()[1] < len(s) - 1:
+                raise Exception()
             G = str(cvtfunc(R.group("W"))) + "x"
             G += str(cvtfunc(R.group("H")))
-        except:
+        except Exception:
             patt = r"\+(?P<X>\d+)\+(?P<Y>\d+)"  # format "+X+Y"
             R = re.compile(patt).match(s)
-            if R.span()[1] < len(s) - 1: raise Exception("Incorrect geometry string.")
+            if R.span()[1] < len(s) - 1:
+                raise Exception("Incorrect geometry string.")
             G = "+" + str(cvtfunc(R.group("X"))) + "+"
             G += str(cvtfunc(R.group("Y")))
     return G
@@ -85,12 +88,15 @@ class DPIAwareTk(Tk):
         self.geometry = lambda s: self.wm_geometry(TkGeometryScale(s, self.TkScale))
 
         orig_place = Widget.place
+
         def scaled_place(widget, *args, **kwargs):
             for key in ("x", "y", "width", "height"):
                 if key in kwargs:
                     kwargs[key] = self.TkScale(kwargs[key])
             return orig_place(widget, *args, **kwargs)
+
         Widget.place = scaled_place
+
 
 def fix_HiDPI(root):
     """Adjust scaling for HiDPI displays on Windows."""
