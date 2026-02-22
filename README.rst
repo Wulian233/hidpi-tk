@@ -64,3 +64,5 @@ Thanks
 The library development is based on `high-dpi-tkinter <https://github.com/not-dev/high-dpi-tkinter>`_.
 
 Added: High-DPI font scaling support, legacy Windows support, bug fixes, and modern Python standards.
+
+Developed from v1, the original project has now been completely rewritten.

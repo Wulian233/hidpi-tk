@@ -1,6 +1,12 @@
 Changes
 =======
 
+1.4.0 (2026-02-22)
+------------------
+
+- Added automatic DPI awareness for `Toplevel` windows, inheriting scaling from the root window.
+- Internal refactoring to support negative window positions (`+X+Y` with negative values).
+
 1.3.1 (2025-10-26)
 ------------------
 

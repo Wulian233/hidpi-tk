@@ -1,9 +1,9 @@
 import os
 import re
 from ctypes import pointer, windll, wintypes
-from tkinter import Tk, Widget
+from tkinter import Tk, Toplevel, Widget
 
-__version__ = "1.3.1"
+__version__ = "1.4.0"
 
 __all__ = ("DPIAwareTk", "fix_HiDPI")
 
@@ -37,32 +37,35 @@ def Get_HWND_DPI(window_handle):
 
 
 def TkGeometryScale(s, cvtfunc):
-    """Scale geometry string based on DPI scaling."""
-    try:
-        patt = r"(?P<W>\d+)x(?P<H>\d+)\+(?P<X>\d+)\+(?P<Y>\d+)"  # format "WxH+X+Y"
-        R = re.compile(patt).match(s)
-        if R.span()[1] < len(s) - 1:
-            raise Exception()
-        G = str(cvtfunc(R.group("W"))) + "x"
-        G += str(cvtfunc(R.group("H"))) + "+"
-        G += str(cvtfunc(R.group("X"))) + "+"
-        G += str(cvtfunc(R.group("Y")))
-    except Exception:
-        try:
-            patt = r"(?P<W>\d+)x(?P<H>\d+)"  # format "WxH"
-            R = re.compile(patt).match(s)
-            if R.span()[1] < len(s) - 1:
-                raise Exception()
-            G = str(cvtfunc(R.group("W"))) + "x"
-            G += str(cvtfunc(R.group("H")))
-        except Exception:
-            patt = r"\+(?P<X>\d+)\+(?P<Y>\d+)"  # format "+X+Y"
-            R = re.compile(patt).match(s)
-            if R.span()[1] < len(s) - 1:
-                raise Exception("Incorrect geometry string.")
-            G = "+" + str(cvtfunc(R.group("X"))) + "+"
-            G += str(cvtfunc(R.group("Y")))
-    return G
+    """Scale geometry string based on DPI scaling.
+
+    Supports formats:
+        - WxH+X+Y
+        - WxH
+        - +X+Y
+    """
+    patt_full = r"^(?P<W>\d+)x(?P<H>\d+)\+(?P<X>-?\d+)\+(?P<Y>-?\d+)$"
+    patt_size = r"^(?P<W>\d+)x(?P<H>\d+)$"
+    patt_pos = r"^\+(?P<X>-?\d+)\+(?P<Y>-?\d+)$"
+
+    m = re.match(patt_full, s)
+    if m:
+        return (
+            f"{cvtfunc(m.group('W'))}x"
+            f"{cvtfunc(m.group('H'))}+"
+            f"{cvtfunc(m.group('X'))}+"
+            f"{cvtfunc(m.group('Y'))}"
+        )
+
+    m = re.match(patt_size, s)
+    if m:
+        return f"{cvtfunc(m.group('W'))}x{cvtfunc(m.group('H'))}"
+
+    m = re.match(patt_pos, s)
+    if m:
+        return f"+{cvtfunc(m.group('X'))}+{cvtfunc(m.group('Y'))}"
+
+    return s
 
 
 def fix_scaling(root):
@@ -79,6 +82,11 @@ def fix_scaling(root):
 
 
 class DPIAwareTk(Tk):
+    """Tk root window with DPI awareness applied globally.
+
+    All subsequent Tk and Toplevel windows inherit the scaling adjustments.
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         fix_HiDPI(self)
@@ -87,6 +95,7 @@ class DPIAwareTk(Tk):
         self.TkScale = lambda v: int(float(v) * self.DPI_scaling)
         self.geometry = lambda s: self.wm_geometry(TkGeometryScale(s, self.TkScale))
 
+        # Patch place for widgets to apply DPI scaling
         orig_place = Widget.place
 
         def scaled_place(widget, *args, **kwargs):
@@ -96,6 +105,23 @@ class DPIAwareTk(Tk):
             return orig_place(widget, *args, **kwargs)
 
         Widget.place = scaled_place
+
+        # Patch Toplevel to inherit DPI awareness automatically
+        orig_toplevel_init = Toplevel.__init__
+
+        def dpi_aware_toplevel_init(toplevel_self, *a, **kw):
+            orig_toplevel_init(toplevel_self, *a, **kw)
+            fix_HiDPI(toplevel_self)
+
+            def to_scale(v):
+                return int(float(v) * toplevel_self.DPI_scaling)
+
+            toplevel_self.TkScale = to_scale
+            toplevel_self.geometry = lambda s: toplevel_self.wm_geometry(
+                TkGeometryScale(s, to_scale)
+            )
+
+        Toplevel.__init__ = dpi_aware_toplevel_init
 
 
 def fix_HiDPI(root):
