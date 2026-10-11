@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hidpi-tk"
-version = "1.4.0"
+version = "1.4.1"
 requires-python = ">=3.6"
 authors = [
-  {name = "Wulian233", email = "xiguawulian@gmail.com"},
+  {name = "Wulian233", email = "wulian2333@gmail.com"},
 ]
 description = "Fixed Tkinter-based GUI window blurry on high-DPI monitors."
 readme = "README.rst"

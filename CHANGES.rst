@@ -1,6 +1,11 @@
 Changes
 =======
 
+1.4.1 (2026-10-11)
+------------------
+
+- Fixed importing the library on Linux and macOS by loading Windows-specific ctypes APIs only on Windows.
+
 1.4.0 (2026-02-22)
 ------------------
 

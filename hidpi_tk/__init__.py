@@ -1,9 +1,11 @@
 import os
 import re
-from ctypes import pointer, windll, wintypes
 from tkinter import Tk, Toplevel, Widget
 
-__version__ = "1.4.0"
+if os.name == "nt":
+    from ctypes import pointer, windll, wintypes
+
+__version__ = "1.4.1"
 
 __all__ = ("DPIAwareTk", "fix_HiDPI")
 
